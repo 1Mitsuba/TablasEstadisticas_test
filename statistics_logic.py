@@ -200,10 +200,10 @@ def _validate_rows(rows: list[FrequencyRow], n: int) -> list[dict[str, Any]]:
     sum_pi = sum(row.pi for row in rows)
     last = rows[-1]
     checks = [
-        ("Suma fi = n", sum_fi == n, sum_fi, n),
+        (f"Suma fi = {n}", sum_fi == n, sum_fi, n),
         ("Suma hi = 1.000", math.isclose(sum_hi, 1, abs_tol=EPSILON), round(sum_hi, 3), 1.000),
         ("Suma pi = 100", math.isclose(sum_pi, 100, abs_tol=EPSILON), round(sum_pi, 2), 100),
-        ("Ultimo Fi = n", last.Fi == n, last.Fi, n),
+        (f"Ultimo Fi = {n}", last.Fi == n, last.Fi, n),
         ("Ultimo Hi = 1.000", math.isclose(last.Hi, 1, abs_tol=EPSILON), round(last.Hi, 3), 1.000),
         ("Ultimo Pi = 100", math.isclose(last.Pi, 100, abs_tol=EPSILON), round(last.Pi, 2), 100),
     ]
