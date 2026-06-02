@@ -263,7 +263,7 @@ def _grouped_steps(
         k_step = f"K = redondeo(1 + 3.3 x log10({n})) = {k}."
     else:
         intro = f"Como 30 <= n = {n} <= 300, se aplica Maximo Entero."
-        k_step = f"K = parte_entera(10 x log10({n})) = {k}."
+        k_step = f"K = 10 x log10({n}) = {k}."
 
     # Determinar la descripción de c basada en decimales
     if max_decimals == 0:
@@ -286,7 +286,7 @@ def _grouped_steps(
         c_description,
         f"Se calculo la amplitud la = D - d + c = {_format_number(D)} - {_format_number(d)} + {c} = {round(la, 4)}.",
         k_step,
-        f"Se calculo t = la / K = {round(la, 4)} / {k} = {t_raw_display}. Se redondeo hacia arriba (ceiling) obteniendo: t = {int(t)}.",
+        f"Se calculo t = la / K = {round(la, 4)} / {k} = {t_raw_display}. Se redondeo hacia arriba obteniendo: t = {int(t)}.",
         f"Se verifico t x K = {int(t)} x {k} = {round(coverage, 4)} >= la = {round(la, 4)}.",
         "Se generaron intervalos semiabiertos [Li ; Ls) y el ultimo intervalo incluye el extremo superior.",
         "Se calcularon fi, hi, pi, Fi, Hi y Pi.",
