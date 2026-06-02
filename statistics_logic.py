@@ -135,7 +135,6 @@ def _grouped_distribution(values: list[float], k: int, technique: str) -> dict[s
     la = D - d + c
     t_raw = la / k
     t = math.ceil(t_raw)  # Redondea al próximo número entero superior
-    coverage = t * k
 
     intervals = []
     frequencies: list[int] = []
@@ -151,7 +150,7 @@ def _grouped_distribution(values: list[float], k: int, technique: str) -> dict[s
 
     rows = _build_rows(intervals, frequencies, n)
     formulas = _grouped_formulas(technique)
-    steps = _grouped_steps(technique, n, d, D, c, la, k, t_raw, t, coverage, max_decimals)
+    steps = _grouped_steps(technique, n, d, D, c, la, k, t_raw, t, max_decimals)
 
     result = {
         "technique": _technique_title(technique),
@@ -163,7 +162,6 @@ def _grouped_distribution(values: list[float], k: int, technique: str) -> dict[s
             "la": round(la, 4),
             "K": k,
             "t": int(t),
-            "cobertura": round(coverage, 4),
         },
         "steps": steps,
         "formulas": formulas,
@@ -236,10 +234,10 @@ def _grouped_formulas(technique: str) -> list[str]:
         "Pi = Hi x 100",
     ]
     if technique == "arbitrary":
-        return ["a = [d ; D]", "la = D - d + c", "t = la / K", "t x K >= la"] + common
+        return ["a = [d ; D]", "la = D - d + c", "t = la / K"] + common
     if technique == "sturges":
-        return ["a = [d ; D]", "la = D - d + 1", "K = 1 + 3.3 x log(n)", "t = la / K", "t x K >= la"] + common
-    return ["a = [d ; D]", "la = D - d + 1", "K = parte_entera(10 x log(n))", "t = la / K", "t x K >= la"] + common
+        return ["a = [d ; D]", "la = D - d + 1", "K = 1 + 3.3 x log(n)", "t = la / K"] + common
+    return ["a = [d ; D]", "la = D - d + 1", "K = parte_entera(10 x log(n))", "t = la / K"] + common
 
 
 def _grouped_steps(
@@ -252,7 +250,6 @@ def _grouped_steps(
     k: int,
     t_raw: float,
     t: float,
-    coverage: float,
     max_decimals: int,
 ) -> list[str]:
     if technique == "arbitrary":
@@ -287,7 +284,6 @@ def _grouped_steps(
         f"Se calculo la amplitud la = D - d + c = {_format_number(D)} - {_format_number(d)} + {c} = {round(la, 4)}.",
         k_step,
         f"Se calculo t = la / K = {round(la, 4)} / {k} = {t_raw_display}. Se redondeo hacia arriba obteniendo: t = {int(t)}.",
-        f"Se verifico t x K = {int(t)} x {k} = {round(coverage, 4)} >= la = {round(la, 4)}.",
         "Se generaron intervalos semiabiertos [Li ; Ls) y el ultimo intervalo incluye el extremo superior.",
         "Se calcularon fi, hi, pi, Fi, Hi y Pi.",
     ]
