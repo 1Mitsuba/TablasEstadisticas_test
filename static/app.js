@@ -13,6 +13,7 @@ const steps = document.querySelector("#steps");
 const frequencyBody = document.querySelector("#frequency-body");
 const validations = document.querySelector("#validations");
 const themeToggle = document.querySelector("#theme-toggle");
+const themeIcon = document.querySelector(".theme-icon");
 const fileInput = document.querySelector("#file-input");
 const fileDropZone = document.querySelector("#file-drop-zone");
 
@@ -170,11 +171,20 @@ fileDropZone.addEventListener("drop", (e) => {
 function initializeTheme() {
   const savedTheme = localStorage.getItem("theme") || "light";
   document.documentElement.setAttribute("data-theme", savedTheme);
-  updateThemeIcon(savedTheme);
+  updateThemeIconDisplay(savedTheme);
 }
 
 function updateThemeIcon(theme) {
   themeToggle.textContent = theme === "dark" ? "☀️" : "🌙";
+}
+
+function updateThemeIconDisplay(theme) {
+  const icon = theme === "dark" ? "☀" : "☾";
+  if (themeIcon) {
+    themeIcon.textContent = icon;
+    return;
+  }
+  themeToggle.textContent = icon;
 }
 
 function toggleTheme() {
@@ -182,7 +192,7 @@ function toggleTheme() {
   const newTheme = currentTheme === "dark" ? "light" : "dark";
   document.documentElement.setAttribute("data-theme", newTheme);
   localStorage.setItem("theme", newTheme);
-  updateThemeIcon(newTheme);
+  updateThemeIconDisplay(newTheme);
 }
 
 themeToggle.addEventListener("click", toggleTheme);
@@ -219,7 +229,8 @@ function renderResult(result) {
   resultTitle.textContent = result.technique;
 
   metadata.innerHTML = Object.entries(result.metadata)
-    .map(([key, value]) => `<span class="chip">${escapeHtml(key)}: ${escapeHtml(value)}</span>`)
+    .filter(([key]) => shouldShowMetadata(key, result.metadata))
+    .map(([key, value]) => `<span class="chip">${escapeHtml(formatMetadataKey(key))}: ${escapeHtml(formatMetadataValue(value))}</span>`)
     .join("");
 
   formulas.innerHTML = result.formulas.map((item) => `<li>${escapeHtml(item)}</li>`).join("");
@@ -242,6 +253,7 @@ function renderResult(result) {
     .join("");
 
   validations.innerHTML = result.validations
+    .filter((validation) => shouldShowValidation(validation.name))
     .map(
       (validation) => `
         <div class="validation ${validation.ok ? "" : "error"}">
@@ -251,6 +263,53 @@ function renderResult(result) {
       `,
     )
     .join("");
+}
+
+function shouldShowValidation(name) {
+  const hiddenValidations = new Set([
+    "Primer intervalo incluye dato mínimo",
+    "Último intervalo incluye dato máximo",
+    "Sin intervalos vacíos en extremos",
+    "Todos los datos están clasificados",
+  ]);
+  return !hiddenValidations.has(name);
+}
+
+function shouldShowMetadata(key, currentMetadata) {
+  const hiddenKeys = new Set(["correction_applied", "cobertura"]);
+  const groupedAliasKeys = new Set(["d", "D", "la"]);
+  if (currentMetadata.d_original !== undefined && groupedAliasKeys.has(key)) {
+    return false;
+  }
+  return !hiddenKeys.has(key);
+}
+
+function formatMetadataKey(key) {
+  const labels = {
+    n: "n",
+    d: "d",
+    D: "D",
+    c: "c",
+    K: "K",
+    t: "t",
+    d_original: "d original",
+    D_original: "D original",
+    d_corrected: "d corregido",
+    D_corrected: "D corregido",
+    la: "Longitud del alcance",
+    la_original: "Longitud original",
+    la_corrected: "Longitud corregida",
+    leftover: "Sobrante",
+    valores_distintos: "Valores distintos",
+  };
+  return labels[key] || key.replaceAll("_", " ");
+}
+
+function formatMetadataValue(value) {
+  if (typeof value === "boolean") {
+    return value ? "Sí" : "No";
+  }
+  return value;
 }
 
 function escapeHtml(value) {
