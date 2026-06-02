@@ -1,0 +1,160 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Tablas de Frecuencia</title>
+    <link rel="stylesheet" href="styles.css" />
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='75' font-size='75'>📊</text></svg>" />
+  </head>
+  <body>
+    <header class="app-header">
+      <div class="header-content">
+        <div class="logo-section">
+          <div class="logo">📊</div>
+          <h1 class="app-title">Estadistica</h1>
+        </div>
+        <button class="theme-toggle" id="theme-toggle" aria-label="Toggle theme">
+          <span class="theme-icon">🌙</span>
+        </button>
+      </div>
+    </header>
+
+    <main class="app">
+      <div class="container-main">
+        <!-- COLUMNA IZQUIERDA -->
+        <aside class="sidebar">
+          <section class="panel section-input">
+            <div class="section-header">
+              <span class="section-icon">📤</span>
+              <h3>Ingreso de Datos</h3>
+            </div>
+            <div class="import-section">
+              <div class="import-header">
+                <h4>Cargar datos</h4>
+                <span class="import-hint">o arrastra un archivo Excel</span>
+              </div>
+              <div class="file-drop-zone" id="file-drop-zone">
+                <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                  <polyline points="17 8 12 3 7 8"></polyline>
+                  <line x1="12" y1="3" x2="12" y2="15"></line>
+                </svg>
+                <p>Sube un archivo Excel (.xlsx, .xls)</p>
+                <input 
+                  type="file" 
+                  id="file-input" 
+                  accept=".xlsx,.xls,.csv"
+                  hidden
+                />
+              </div>
+
+              <label for="data-input">Datos numericos</label>
+              <textarea
+                id="data-input"
+                name="data"
+                rows="6"
+                placeholder="Ejemplo: 12, 15, 18, 18, 21, 24, 27"
+                required
+              ></textarea>
+            </div>
+          </section>
+
+          <section class="panel section-technique">
+            <div class="section-header">
+              <span class="section-icon">⚙️</span>
+              <h3>Selección de Técnica</h3>
+            </div>
+
+            <form id="stats-form">
+              <div class="controls-vertical">
+                <div>
+                  <label for="technique">Tecnica</label>
+                  <select id="technique" name="technique">
+                    <option value="simple">Simple inspeccion</option>
+                    <option value="arbitrary">Distribucion arbitraria</option>
+                    <option value="sturges">Sturges</option>
+                    <option value="max_integer">Maximo entero</option>
+                  </select>
+                </div>
+
+                <div id="k-field" class="k-field">
+                  <label for="k-input">K arbitrario</label>
+                  <input id="k-input" name="k" type="number" min="5" max="7" placeholder="5 a 7" />
+                </div>
+              </div>
+            </form>
+          </section>
+
+          <section class="panel section-actions">
+            <div class="section-header">
+              <span class="section-icon">✨</span>
+              <h3>Acciones</h3>
+            </div>
+            <div class="actions-grid">
+              <button type="submit" form="stats-form" class="action-btn primary">Generar Tabla</button>
+              <button type="button" id="reset-button" class="action-btn secondary">Reiniciar</button>
+            </div>
+          </section>
+        </aside>
+
+        <!-- COLUMNA DERECHA -->
+        <section class="main-content">
+          <div id="results" class="results" hidden>
+            <div class="result-header">
+              <div>
+                <p class="eyebrow">Resultado</p>
+                <h2 id="result-title"></h2>
+              </div>
+              <div class="metadata" id="metadata"></div>
+            </div>
+
+            <article class="panel grid-two">
+              <div>
+                <h3>Formulas utilizadas</h3>
+                <ul id="formulas"></ul>
+              </div>
+              <div>
+                <h3>Calculos paso a paso</h3>
+                <ol id="steps"></ol>
+              </div>
+            </article>
+
+            <article class="panel table-panel">
+              <h3>Tabla de frecuencias</h3>
+              <div class="table-wrap">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Intervalo</th>
+                      <th>fi</th>
+                      <th>hi</th>
+                      <th>pi</th>
+                      <th>Fi</th>
+                      <th>Hi</th>
+                      <th>Pi</th>
+                    </tr>
+                  </thead>
+                  <tbody id="frequency-body"></tbody>
+                </table>
+              </div>
+            </article>
+
+            <article class="panel">
+              <h3>Validaciones</h3>
+              <div id="validations" class="validations"></div>
+            </article>
+          </div>
+
+          <section class="panel empty-state" id="empty-state">
+            <h2>Ingrese los datos y genere una tabla</h2>
+            <p>Los datos pueden estar separados por comas, espacios, punto y coma o saltos de linea.</p>
+          </section>
+        </section>
+      </div>
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+    <script src="app.js"></script>
+  </body>
+</html>

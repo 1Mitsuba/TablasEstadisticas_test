@@ -1,0 +1,8 @@
+127.0.0.1 - - [01/Jun/2026 10:08:00] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jun/2026 10:08:00] "GET /styles.css HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jun/2026 10:08:01] "GET /app.js HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jun/2026 10:08:06] code 404, message File not found
+127.0.0.1 - - [01/Jun/2026 10:08:06] "GET /favicon.ico HTTP/1.1" 404 -
+127.0.0.1 - - [01/Jun/2026 10:12:22] "POST /api/calculate HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jun/2026 10:20:33] "POST /api/calculate HTTP/1.1" 200 -
+127.0.0.1 - - [01/Jun/2026 10:22:42] "POST /api/calculate HTTP/1.1" 200 -
