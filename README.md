@@ -12,7 +12,7 @@ La logica estadistica esta implementada en Python. La interfaz usa HTML, CSS y J
 ## Ejecutar
 
 ```bash
-python app.py
+python -B app.py
 ```
 
 Luego abrir:
