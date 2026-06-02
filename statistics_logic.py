@@ -162,7 +162,7 @@ def _grouped_distribution(values: list[float], k: int, technique: str) -> dict[s
             "c": c,
             "la": round(la, 4),
             "K": k,
-            "t": round(t, 4),
+            "t": int(t),
             "cobertura": round(coverage, 4),
         },
         "steps": steps,
